@@ -61,12 +61,41 @@ elif page == "Cargar CSV":
         st.write("📋 Vista Previa de los Datos:")
         st.dataframe(df_csv)
         
-        # Gráfico dinámico con los datos cargados
-        if 'Fecha' in df_csv.columns and 'Precio' in df_csv.columns:
-            fig_csv = px.line(df_csv, x='Fecha', y='Precio', title='Evolución del Precio en CSV')
-            st.plotly_chart(fig_csv, use_container_width=True)
-        else:
-            st.warning("El CSV debe contener las columnas 'Fecha' y 'Precio' para graficar.")
+        # Selección de columnas a graficar
+        columnas_disponibles = df_csv.columns.tolist()
+        columnas_seleccionadas = st.multiselect("Selecciona las columnas para graficar", columnas_disponibles)
+        tipo_grafico = st.selectbox("Selecciona el tipo de gráfico", ['Línea', 'Barras', 'Dispersión', 'Pie', 'Histograma'])
+        
+        if columnas_seleccionadas:
+            df_filtrado = df_csv[columnas_seleccionadas]
+            
+            # Verificar si son numéricas o categóricas
+            if df_filtrado.select_dtypes(include=[np.number]).shape[1] == len(columnas_seleccionadas):
+                # Variables numéricas
+                if tipo_grafico == 'Línea':
+                    fig = px.line(df_csv, x=columnas_seleccionadas[0], y=columnas_seleccionadas[1:], title='Gráfico de Línea')
+                elif tipo_grafico == 'Barras':
+                    fig = px.bar(df_csv, x=columnas_seleccionadas[0], y=columnas_seleccionadas[1:], title='Gráfico de Barras')
+                elif tipo_grafico == 'Dispersión':
+                    fig = px.scatter(df_csv, x=columnas_seleccionadas[0], y=columnas_seleccionadas[1:], title='Gráfico de Dispersión')
+                elif tipo_grafico == 'Histograma':
+                    fig = px.histogram(df_csv, x=columnas_seleccionadas[0], title='Histograma')
+                
+            else:
+                # Variables categóricas - Conteo
+                conteo = df_filtrado[columnas_seleccionadas[0]].value_counts().reset_index()
+                conteo.columns = ['Categoría', 'Cantidad']
+                
+                if tipo_grafico == 'Barras':
+                    fig = px.bar(conteo, x='Categoría', y='Cantidad', title='Conteo de Categorías')
+                elif tipo_grafico == 'Pie':
+                    fig = px.pie(conteo, names='Categoría', values='Cantidad', title='Distribución de Categorías')
+                else:
+                    st.warning("Las variables categóricas solo pueden graficarse en Barras o Pie.")
+                    fig = None
+            
+            if fig:
+                st.plotly_chart(fig, use_container_width=True)
     
     else:
         st.info("Por favor, sube un archivo CSV para analizar los datos.")
