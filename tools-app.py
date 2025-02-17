@@ -33,7 +33,7 @@ if page == "Generar Datos":
     total_filas = st.sidebar.slider("Número de filas", min_value=50, max_value=1000, value=200, step=50)
     
     # Generación de datos
-df = generar_datos(total_filas)
+    df = generar_datos(total_filas)
     
     # Mostrar la tabla de datos
     st.subheader("📊 Datos Generados")
@@ -51,7 +51,7 @@ df = generar_datos(total_filas)
         fig = px.scatter(df, x='Producción', y='Precio', color='Cultivo', title='Relación entre Producción y Precio')
     
     st.plotly_chart(fig, use_container_width=True)
-    
+
 elif page == "Cargar CSV":
     st.subheader("📂 Cargar Archivo CSV")
     uploaded_file = st.file_uploader("Sube un archivo CSV", type=['csv'])
