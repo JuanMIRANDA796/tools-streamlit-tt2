@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import plotly.express as px
+import time
 
 # Configuración inicial de la página
 st.set_page_config(page_title='Dashboard Agroindustria', layout='wide')
@@ -69,6 +70,18 @@ if 'Fecha' in df_filtered.columns and 'Precio Unitario ($)' in df_filtered.colum
 if 'Demanda' in df_filtered.columns and 'Exportaciones (Ton)' in df_filtered.columns:
     fig_demand = px.scatter(df_filtered, x='Demanda', y='Exportaciones (Ton)', color='Cultivo', title='Demanda vs Exportaciones')
     st.plotly_chart(fig_demand, use_container_width=True)
+
+# Gráfico dinámico de serie de tiempo
+time_series_data = pd.DataFrame({'Fecha': pd.date_range(start='2024-01-01', periods=100, freq='D'),
+                                 'Valor': np.random.rand(100) * 100})
+
+st.subheader('Serie de Tiempo Dinámica')
+chart_placeholder = st.empty()
+
+for i in range(50, 100):
+    fig_time = px.line(time_series_data.iloc[:i], x='Fecha', y='Valor', title='Evolución en el Tiempo')
+    chart_placeholder.plotly_chart(fig_time, use_container_width=True)
+    time.sleep(0.1)
 
 # Footer
 st.markdown('---')
