@@ -81,12 +81,12 @@ chart_placeholder = st.empty()
 while True:
     for i in range(50, 100):
         fig_time = px.line(time_series_data.iloc[:i], x='Fecha', y='Valor', title='Evolución en el Tiempo')
-        chart_placeholder.plotly_chart(fig_time, use_container_width=True)
+        chart_placeholder.plotly_chart(fig_time, use_container_width=True, key=f'plotly_chart_{i}')
         time.sleep(0.1)
     
     for i in range(100, 50, -1):
         fig_time = px.line(time_series_data.iloc[:i], x='Fecha', y='Valor', title='Evolución en el Tiempo')
-        chart_placeholder.plotly_chart(fig_time, use_container_width=True)
+        chart_placeholder.plotly_chart(fig_time, use_container_width=True, key=f'plotly_chart_{i}_rev')
         time.sleep(0.1)
 
 # Footer
