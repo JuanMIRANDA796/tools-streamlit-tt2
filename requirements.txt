@@ -3,3 +3,6 @@ pandas
 numpy
 plotly
 sqlite3
+sqlalchemy
+requests
+
