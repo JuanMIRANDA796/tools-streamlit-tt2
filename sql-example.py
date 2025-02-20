@@ -5,7 +5,7 @@ import requests
 import os
 
 # URL del archivo SQL en GitHub (reemplaza con tu enlace)
-GITHUB_SQL_URL = "https://github.com/jipadilla7/tools-streamlit-tt2/blob/main/medio_ambiente_colombia.sql"
+GITHUB_SQL_URL = "https://raw.githubusercontent.com/jipadilla7/tools-streamlit-tt2/refs/heads/main/medio_ambiente_colombia.sql"
 
 # Función para descargar y guardar el archivo SQL
 def descargar_sql(url, filename="database.sql"):
